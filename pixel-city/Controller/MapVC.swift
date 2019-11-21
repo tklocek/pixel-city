@@ -16,7 +16,10 @@ class MapVC: UIViewController {
     
     //Outlets
     @IBOutlet weak var mapView: MKMapView!
-   
+    @IBOutlet weak var pullUpViewHeightConstrains: NSLayoutConstraint!
+    
+    @IBOutlet weak var pullUpView: UIView!
+    
 
     
     
@@ -24,11 +27,29 @@ class MapVC: UIViewController {
     let authorizationStatus = CLLocationManager.authorizationStatus()
     let regionRadius: Double = 1000
     
+    var screenSize = UIScreen.main.bounds
+    
+    var spinner: UIActivityIndicatorView?
+    var progressLbl: UILabel?
+    
+    var flowLayout = UICollectionViewFlowLayout()
+    var collectionView: UICollectionView?
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         locationManager.delegate = self
         configureLocationServices()
         addDoubleTap()
+        
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout  )
+        collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: "photoCell")
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
+        collectionView?.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+        
+        pullUpView?.addSubview(collectionView!)
     }
     
     
@@ -37,7 +58,56 @@ class MapVC: UIViewController {
         doubleTap.numberOfTapsRequired = 2
         mapView.addGestureRecognizer(doubleTap)
     }
+    
+    func addSwipe() {
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(animateViewDown))
+        swipe.direction = .down
+        pullUpView.addGestureRecognizer(swipe)
+    }
 
+    @objc func animateViewDown() {
+        pullUpViewHeightConstrains.constant = 0
+        UIView.animate(withDuration: 0.3){
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func addSpinner() {
+        spinner = UIActivityIndicatorView()
+        spinner?.center = CGPoint(x: (screenSize.width / 2)  - ((spinner?.frame.width)! / 2), y: 150)
+        spinner?.style = .large
+        spinner?.color = #colorLiteral(red: 0.2605174184, green: 0.2605243921, blue: 0.260520637, alpha: 1)
+        spinner?.startAnimating()
+        collectionView?.addSubview(spinner!)
+    }
+    
+    func removeSpinner() {
+        if spinner != nil {
+            spinner?.removeFromSuperview()
+        }
+    }
+    
+    func addProgressLbl() {
+        progressLbl = UILabel()
+        progressLbl?.frame = CGRect(x: (screenSize.width / 2) - 120, y: 175, width: 240, height: 40)
+        progressLbl?.font = UIFont(name: "Avenir Next", size: 18)
+        progressLbl?.textColor = #colorLiteral(red: 0.3333333433, green: 0.3333333433, blue: 0.3333333433, alpha: 1)
+        progressLbl?.textAlignment = .center
+        collectionView?.addSubview(progressLbl!)
+    }
+    
+    func removeProgressLbl() {
+        if progressLbl != nil {
+            progressLbl?.removeFromSuperview()
+        }
+    }
+    func animateViewUp() {
+        pullUpViewHeightConstrains.constant = 300
+        UIView.animate(withDuration: 0.30) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     @IBAction func centerMapBtnWasPressed(_ sender: Any) {
         if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
             centerMapOnUserLocation()
@@ -70,6 +140,13 @@ extension MapVC: MKMapViewDelegate {
     
     @objc func dropPin(sender: UITapGestureRecognizer) {
         removePin()
+        animateViewUp()
+        addSwipe()
+        removeSpinner()
+        addSpinner()
+        removeProgressLbl()
+        addProgressLbl()
+        
         let touchPoint = sender.location(in: mapView)
         let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         
@@ -99,5 +176,21 @@ extension MapVC: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         centerMapOnUserLocation()
+    }
+}
+
+
+
+extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        // numbers of item in array
+        return 4
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell
+        return cell!
     }
 }
