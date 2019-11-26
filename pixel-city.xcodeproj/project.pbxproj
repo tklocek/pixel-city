@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		701ABF38238D156B00968AD2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701ABF37238D156B00968AD2 /* Constants.swift */; };
+		701ABF3A238DC75500968AD2 /* PopVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701ABF39238DC75500968AD2 /* PopVC.swift */; };
 		703CEA8B237B1CB00055CB1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703CEA8A237B1CB00055CB1D /* AppDelegate.swift */; };
 		703CEA8D237B1CB00055CB1D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703CEA8C237B1CB00055CB1D /* SceneDelegate.swift */; };
 		703CEA8F237B1CB00055CB1D /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703CEA8E237B1CB00055CB1D /* MapVC.swift */; };
@@ -21,6 +22,7 @@
 
 /* Begin PBXFileReference section */
 		701ABF37238D156B00968AD2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		701ABF39238DC75500968AD2 /* PopVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopVC.swift; sourceTree = "<group>"; };
 		703CEA87237B1CB00055CB1D /* pixel-city.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "pixel-city.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		703CEA8A237B1CB00055CB1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		703CEA8C237B1CB00055CB1D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				703CEA8E237B1CB00055CB1D /* MapVC.swift */,
+				701ABF39238DC75500968AD2 /* PopVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 			files = (
 				703CEA8F237B1CB00055CB1D /* MapVC.swift in Sources */,
 				70F607452386C38700200F67 /* PhotoCell.swift in Sources */,
+				701ABF3A238DC75500968AD2 /* PopVC.swift in Sources */,
 				70897B652384B01C00A41493 /* DroppablePin.swift in Sources */,
 				703CEA8B237B1CB00055CB1D /* AppDelegate.swift in Sources */,
 				703CEA8D237B1CB00055CB1D /* SceneDelegate.swift in Sources */,
