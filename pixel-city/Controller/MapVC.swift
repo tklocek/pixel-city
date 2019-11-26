@@ -35,6 +35,7 @@ class MapVC: UIViewController {
     var flowLayout = UICollectionViewFlowLayout()
     var collectionView: UICollectionView?
     
+    var imageUrlArray = [String]()
     
     
     override func viewDidLoad() {
@@ -146,7 +147,7 @@ extension MapVC: MKMapViewDelegate {
         addSpinner()
         removeProgressLbl()
         addProgressLbl()
-        
+       
         let touchPoint = sender.location(in: mapView)
         let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         
@@ -155,6 +156,11 @@ extension MapVC: MKMapViewDelegate {
         
         let coordinateRegion = MKCoordinateRegion(center: touchCoordinate, latitudinalMeters: regionRadius * 2.0, longitudinalMeters: regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
+        
+        retriveUrls(forAnnotation: annotation) { (success) in
+            print(self.imageUrlArray)
+        }
+               
     }
     
     func removePin() {
@@ -162,6 +168,25 @@ extension MapVC: MKMapViewDelegate {
             mapView.removeAnnotation(annotation)
         }
     }
+    
+    func retriveUrls(forAnnotation annotation: DroppablePin, handler: @escaping (_ status: Bool) -> ()) {
+        imageUrlArray = []
+    
+        Alamofire.request(flickrUrl(forApiKey: apiKey, withAnnotation: annotation, andNumberOfPhotos: 40)).responseJSON { (response) in
+                guard let json = response.result.value as? Dictionary<String, AnyObject> else {return}
+                let photosDict = json["photos"] as! Dictionary<String, AnyObject>
+                let photosDictArray = photosDict["photo"] as! [Dictionary<String, AnyObject>]
+            
+                for photo in photosDictArray {
+                    let postUrl = "https://farm\(photo["farm"]!).staticflickr.com/\(photo["server"]!)/\(photo["id"]!)_\(photo["secret"]!)_c_d.jpg"
+                    self.imageUrlArray.append(postUrl)
+                }
+            handler(true)
+        }
+        
+        
+    }
+    
 }
 
 extension MapVC: CLLocationManagerDelegate {
