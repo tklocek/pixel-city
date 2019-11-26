@@ -15,7 +15,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsUserLocation="YES" showsCompass="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rwb-G9-8By">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsUserLocation="YES" showsCompass="NO" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rwb-G9-8By">
                                 <rect key="frame" x="0.0" y="70" width="375" height="596"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="3am-sq-wWi"/>
@@ -116,11 +116,20 @@
                                     <constraint firstItem="FKc-0c-ErJ" firstAttribute="centerY" secondItem="GTf-T5-7kB" secondAttribute="centerY" id="iJm-n0-yRF"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sb4-vx-8W9">
+                                <rect key="frame" x="16" y="20" width="343" height="23.5"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="sb4-vx-8W9" firstAttribute="leading" secondItem="8bm-qx-LjQ" secondAttribute="leading" constant="16" id="5Mx-Am-rzx"/>
                             <constraint firstItem="a6V-C8-TPS" firstAttribute="top" secondItem="8bm-qx-LjQ" secondAttribute="top" id="EjG-Pq-nBe"/>
+                            <constraint firstItem="8bm-qx-LjQ" firstAttribute="trailing" secondItem="sb4-vx-8W9" secondAttribute="trailing" constant="16" id="Qa1-kM-MTQ"/>
                             <constraint firstItem="8bm-qx-LjQ" firstAttribute="bottom" secondItem="GTf-T5-7kB" secondAttribute="bottom" constant="20" id="aUw-N1-iSI"/>
+                            <constraint firstItem="sb4-vx-8W9" firstAttribute="top" secondItem="8bm-qx-LjQ" secondAttribute="top" constant="20" id="bgZ-WT-7e7"/>
                             <constraint firstItem="8bm-qx-LjQ" firstAttribute="bottom" secondItem="a6V-C8-TPS" secondAttribute="bottom" id="cJf-ae-5fs"/>
                             <constraint firstItem="GTf-T5-7kB" firstAttribute="centerX" secondItem="fnJ-W6-8Cp" secondAttribute="centerX" id="gXl-un-pVA"/>
                             <constraint firstItem="a6V-C8-TPS" firstAttribute="leading" secondItem="8bm-qx-LjQ" secondAttribute="leading" id="iqt-Ll-Yht"/>
@@ -130,6 +139,7 @@
                     </view>
                     <connections>
                         <outlet property="popImageView" destination="a6V-C8-TPS" id="GyB-iz-8Fk"/>
+                        <outlet property="titleLbl" destination="sb4-vx-8W9" id="Vdk-fd-BeW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8cT-cR-qwD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -37,6 +37,8 @@ class MapVC: UIViewController {
     
     var imageUrlArray = [String]()
     var imageArray = [UIImage]()
+    var imageTitleArray = [String]()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +51,8 @@ class MapVC: UIViewController {
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        
+        registerForPreviewing(with: self, sourceView: collectionView!)
         
         pullUpView?.addSubview(collectionView!)
     }
@@ -145,6 +149,7 @@ extension MapVC: MKMapViewDelegate {
         cancelAllSessions()
         imageArray = []
         imageUrlArray = []
+        imageTitleArray = []
         collectionView?.reloadData()
         
         animateViewUp()
@@ -188,10 +193,15 @@ extension MapVC: MKMapViewDelegate {
                 guard let json = response.result.value as? Dictionary<String, AnyObject> else {return}
                 let photosDict = json["photos"] as! Dictionary<String, AnyObject>
                 let photosDictArray = photosDict["photo"] as! [Dictionary<String, AnyObject>]
-            
+                print(photosDictArray)
                 for photo in photosDictArray {
                     let postUrl = "https://farm\(photo["farm"]!).staticflickr.com/\(photo["server"]!)/\(photo["id"]!)_\(photo["secret"]!)_c_d.jpg"
                     self.imageUrlArray.append(postUrl)
+                    let title = photo["title"] as! String
+                    self.imageTitleArray.append(title)
+                    print(photo)
+                    print("=")
+                    print(title)
                 }
             handler(true)
         }
@@ -199,6 +209,8 @@ extension MapVC: MKMapViewDelegate {
     
     
     func retriveImages(handler: @escaping (_ status: Bool)->()) {
+        // Ta funkcja cos miesza w kolejności obrazów. Ich kolejność nie zgadza się z tytułami.
+        
         for url in imageUrlArray {
             Alamofire.request(url).responseImage { (response) in
                 guard let image = response.result.value else {return}
@@ -259,8 +271,28 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let popVC = storyboard?.instantiateViewController(withIdentifier: "PopVC") as? PopVC else { return }
-        popVC.initData(forImage: imageArray[indexPath.row])
+        popVC.initData(forImage: imageArray[indexPath.row], titleImage: imageTitleArray[indexPath.row])
         present(popVC, animated: true, completion: nil)
+    }
+    
+}
+
+
+extension MapVC: UIViewControllerPreviewingDelegate {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = collectionView?.indexPathForItem(at: location), let cell = collectionView?.cellForItem(at: indexPath) else { return nil }
+        
+        guard let popVC  = storyboard?.instantiateViewController(identifier: "PopVC") as? PopVC else { return nil }
+        
+        popVC.initData(forImage: imageArray[indexPath.row], titleImage: imageTitleArray[indexPath.row])
+        previewingContext.sourceRect = cell.contentView.frame
+        
+        return popVC
+    }
+    
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
     }
     
 }
